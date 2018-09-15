@@ -12,5 +12,7 @@ create table agente(
 	comunidad varchar(50),
 	nombre varchar(50),
 	os varchar(50),
+	num_interfaces int,
+	estado int default 1,
 	primary key (id)
 );

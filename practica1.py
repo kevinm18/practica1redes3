@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, time, threading
 from snmpAccess import *
 from snmpParse import *
 from OID import *
@@ -17,16 +17,27 @@ mysql.init_app(app)
 conn = mysql.connect()
 cursor = conn.cursor()
 
-def insertar(host, comunidad, nombre, version, puerto, sistemaOperativo):
-	cursor.execute('INSERT INTO agente(hostname, version, puerto, comunidad, nombre, os) VALUES (%s, %s, %s, %s, %s, %s)', (host, version, puerto, comunidad, nombre, sistemaOperativo))
+def insertar(host, comunidad, nombre, version, puerto, sistemaOperativo, interfaces):
+	cursor.execute('INSERT INTO agente(hostname, version, puerto, comunidad, nombre, os, num_interfaces) VALUES (%s, %s, %s, %s, %s, %s, %s)', (host, version, puerto, comunidad, nombre, sistemaOperativo, interfaces))
 	conn.commit()
+
+def ping(ip):
+	while(1):
+		response = os.system("ping -c 1 " + ip)
+		if response == 0:
+			cursor.execute('UPDATE agente SET estado = 0 where hostname = "' + ip + '"')
+		else:
+			cursor.execute('UPDATE agente SET estado = 1 where hostname = "' + ip + '"')
+		conn.commit()
+		time.sleep(1)
 
 @app.route('/')
 def main():
 	cursor.execute("SELECT * FROM agente")
 	data = cursor.fetchall()
 	for row in data:
-		pass
+		hiloPing = threading.Thread(target = ping, args = (row[1],))
+		hiloPing.start()
 	return render_template('index.html', data = data)
 
 @app.route('/add')
@@ -42,10 +53,11 @@ def agregar():
 	puerto = request.form['puerto']
 	if host and comunidad and nombre and version and puerto:
 		sistemaOperativo = parseResultAfterEquals(snmpGet(comunidad, host, OID_SYSINFO))
-		insertar(host, comunidad, nombre, version, puerto, sistemaOperativo)
+		interfaces = parseResultAfterEquals(snmpGet(comunidad, host, OID_INTERFACES))
+		insertar(host, comunidad, nombre, version, puerto, sistemaOperativo, interfaces)
 		return redirect(url_for('main'))
 	else:
-		return json.dumps({'html':'<span>Llene todos los campos</span>'})
+		return json.dumps({'html':'<span> Llene todos los campos </span>'})
 
 if __name__ == "__main__":
 	app.run()

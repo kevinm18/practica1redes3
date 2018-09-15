@@ -1,6 +1,68 @@
-<h1>
-	SNMP >:v
-</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>SNMP</title>
+	<link href="../static/estilos.css" rel="stylesheet">
+</head>
+<body>
+	<h1>Listado de agentes</h1>
+	<table>
+		<tr>
+		  <th><strong>Host</strong></th>
+		  <th><strong>Version</strong></th>
+		  <th><strong>Puerto</strong></th>
+		  <th><strong>Comunidad</strong></th>
+		  <th><strong>Nombre</strong></th>
+		  <th><strong>OS</strong></th>
+		  <th><strong>Num. Interfaces</strong></th>
+		  <th><strong>Estado</strong></th>
+		  <th><strong>Activar</strong></th>
+		  <th><strong>Desactivar</strong></th>
+		  <th><strong>Reporte</strong></th>
+		  <th><strong>Eliminar</strong></th>
+		</tr>
 
-<a href = "add"> Agregar agente </a>
-<a href = "add"> Eliminar agente </a>
+		<!-- Ciclo para obtener datos de los agentes de MYSQL-->
+
+		{% for row in data %}
+		    <tr>
+		   		<td>{{row[1]}}</td>
+		   		<td>{{row[2]}}</td>
+		   		<td>{{row[3]}}</td>
+		   		<td>{{row[4]}}</td>
+		   		<td>{{row[5]}}</td>
+		   		<td>{{row[6]}}</td>
+		   		<td>{{row[7]}}</td>
+		   		<td>{{row[8]}}</td>
+		    	<td>
+		    		<form action="/activar" method="POST">
+		    			<input type="hidden" name="host" value="{{row[0]}}">
+		    			<input type="submit" value="Activar">
+		    		</form>
+		    	</td>
+		    	<td>
+		    		<form action="/desactivar" method="POST">
+		    			<input type="hidden" name="host" value="{{row[0]}}">
+		    			<input type="submit" value="Desactivar">
+		    		</form>
+		    	</td>
+		    	<td>
+		    		<form action="/reporte" method="POST">
+		    			<input type="hidden" name="host" value="{{row[0]}}">
+		    			<input type="submit" value="Ver Reporte">
+		    		</form>
+		    	</td>		    	
+		    	<td>
+		    		<form action="/eliminar" method="POST">
+		    			<input type="hidden" name="host" value="{{row[0]}}">
+		    			<input type="submit" value="Eliminar">
+		    		</form>		    	
+		    	</td>
+		    </tr>
+		{% endfor %}
+	</table>
+
+	<a href="add">Agregar Agente</a>
+</body>
+</html>
