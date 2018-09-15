@@ -5,6 +5,7 @@ create database agentes;
 use agentes;
 
 create table agente(
+	id int,
 	hostname varchar(20),
 	version varchar(5),
 	puerto int,
