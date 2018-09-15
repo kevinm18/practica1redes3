@@ -5,13 +5,12 @@ create database agentes;
 use agentes;
 
 create table agente(
-	id int,
+	id int auto_increment,
 	hostname varchar(20),
 	version varchar(5),
 	puerto int,
 	comunidad varchar(50),
-	nombre varchar(50)
+	nombre varchar(50),
+	os varchar(50),
+	primary key (id)
 );
-
-insert into agente(nombre, version, puerto, comunidad, hostname) 
-	values ('ubuntu', 'v2c', 9050, 'comunidadSNMP', '192.168.0.7');

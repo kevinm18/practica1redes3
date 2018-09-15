@@ -1,6 +1,7 @@
 import os, sys
 from snmpAccess import *
 from snmpParse import *
+from OID import *
 from flask import Flask, render_template, request, json, redirect, url_for 
 from flaskext.mysql import MySQL
 
@@ -16,8 +17,9 @@ mysql.init_app(app)
 conn = mysql.connect()
 cursor = conn.cursor()
 
-OID_SYSINFO = '1.3.6.1.2.1.1.1.0'
-OID_INTERFACES = '1.3.6.1.2.1.2.1.0'
+def insertar(host, comunidad, nombre, version, puerto, sistemaOperativo):
+	cursor.execute('INSERT INTO agente(hostname, version, puerto, comunidad, nombre, os) VALUES (%s, %s, %s, %s, %s, %s)', (host, version, puerto, comunidad, nombre, sistemaOperativo))
+	conn.commit()
 
 @app.route('/')
 def main():
@@ -40,7 +42,7 @@ def agregar():
 	puerto = request.form['puerto']
 	if host and comunidad and nombre and version and puerto:
 		sistemaOperativo = parseResultAfterEquals(snmpGet(comunidad, host, OID_SYSINFO))
-		interfaces = parseResultAfterEquals(snmpGet(comunidad, host, OID_INTERFACES))
+		insertar(host, comunidad, nombre, version, puerto, sistemaOperativo)
 		return redirect(url_for('main'))
 	else:
 		return json.dumps({'html':'<span>Llene todos los campos</span>'})

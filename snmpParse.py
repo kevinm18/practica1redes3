@@ -3,4 +3,4 @@ def parseResultAfterEquals(resultado):
 	for vB in varBinds:
 		varB = (' = '.join([x.prettyPrint() for x in vB]))
 		res = varB.split()[2]
-	return res				
+	return res
