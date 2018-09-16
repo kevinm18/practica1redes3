@@ -16,3 +16,11 @@ create table agente(
 	estado int default 1,
 	primary key (id)
 );
+
+create table interfaz_agente(
+	id_agente int,
+	id_interfaz int,
+	estado int default 2,
+	primary key(id_agente, id_interfaz),
+	foreign key(id_agente) references agente(id)
+);
