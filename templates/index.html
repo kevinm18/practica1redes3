@@ -3,11 +3,15 @@
 <head>
 	<meta charset="UTF-8">
 	<title>SNMP</title>
-	<link href="../static/estilos.css" rel="stylesheet">
+	<link href="../static/style.css" rel="stylesheet">
 </head>
 <body>
+	<!-- Numero de agentes monitorizados -->
 	<h1>Listado de agentes</h1>
+	<label># de agentes: {{ numDispositivos }}</label>
+	<!-- Tabla que contiene la informacion de los agentes -->
 	<table>
+		<!-- Encabezados -->
 		<tr>
 		  <th><strong>Host</strong></th>
 		  <th><strong>Version</strong></th>
@@ -21,6 +25,7 @@
 		  <th><strong>Desactivar</strong></th>
 		  <th><strong>Reporte</strong></th>
 		  <th><strong>Eliminar</strong></th>
+		  <th><strong>Estado de las interfaces</strong></th>
 		</tr>
 
 		<!-- Ciclo para obtener datos de los agentes de MYSQL-->
@@ -59,10 +64,18 @@
 		    			<input type="submit" value="Eliminar">
 		    		</form>		    	
 		    	</td>
+		    	<!-- Boton para ver estado de interfaces -->
+		    	<td>
+		    		<form action="/estadoInterfaces/{{row[0]}}" method="POST">
+		    			<input type="hidden" name="host" value="{{row[0]}}">
+		    			<input type="submit" value="Ver">
+		    		</form>		    	
+		    	</td>
 		    </tr>
 		{% endfor %}
 	</table>
 
+	<!-- Link a la pantalla de agregar -->
 	<a href="add">Agregar Agente</a>
 </body>
 </html>

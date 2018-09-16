@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>SNMP</title>
+	<link href="../static/style.css" rel="stylesheet">
+</head>
+<body>
+	<!-- Informacion del agente -->
+	<h1>Estado de interfaces</h1>
+	<br>
+	<br>
+	<label>Host agente: {{dataAgente[1]}}</label>
+	<br>
+	<label>Nombre agente: {{dataAgente[5]}}</label>
+	<br>
+
+	<!-- Tabla de interfaces -->
+	<table>
+		<tr>
+			<td>Numero</td>
+			<td>Nombre</td>
+			<td>Estado</td>
+		</tr>
+		{% for row in dataInterfaz %}
+			<tr>
+				<td>{{row[0]}}</td>
+				<td>{{row[1]}}</td>
+				<td>
+					{% if row[2] == 1 %}
+						UP
+					{% elif row[2] == 2 %}
+						DOWN
+					{% else %}
+						TESTING
+					{% endif %}
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+	<a href = '/'>Menu principal</a>
+</body>
+</html>

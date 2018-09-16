@@ -1,5 +1,8 @@
 from pysnmp.hlapi import *
 
+# Obtiene la informacion del dispositivo, obteniendo como parametros
+# su comunidad, su ip, y el OID de la informacion que se requiere.
+# Empaqueta toda la informacion en un diccionario y ese es el retorno.
 def snmpGet(comunidad, ip, oid):
 	resultado = {}
 	errorIndication, errorStatus, errorIndex, varBinds = next(
