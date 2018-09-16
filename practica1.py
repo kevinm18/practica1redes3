@@ -97,6 +97,7 @@ def add():
 # a la pagina de ver estado de interfaces
 @app.route('/estadoInterfaces/<idAgente>', methods = ['post', 'get'])
 def estadoInterfaces(idAgente):
+	execfile('hola.py')
 	cursor.execute('SELECT * FROM agente WHERE id = "' + idAgente + '"')
 	dataAgente = cursor.fetchone()
 	cursor.execute('SELECT * FROM interfaz_agente WHERE id_agente = "' + idAgente + '"')
