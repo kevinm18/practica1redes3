@@ -22,6 +22,7 @@
 			<td>Numero</td>
 			<td>Nombre</td>
 			<td>Estado</td>
+			<td>Graficar</td>
 		</tr>
 		{% for row in dataInterfaz %}
 			<tr>
@@ -35,6 +36,12 @@
 					{% else %}
 						TESTING
 					{% endif %}
+				</td>
+				<td>
+					<form action="/generarGrafica/{{row[1]}}_{{dataAgente[0]}}" method="POST">
+		    			<input type="hidden" name="host" value="{{row[1]}}">
+		    			<input type="submit" value="Generar">
+		    		</form>
 				</td>
 			</tr>
 		{% endfor %}

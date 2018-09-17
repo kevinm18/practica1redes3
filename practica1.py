@@ -4,6 +4,7 @@ from snmpParse import *
 from OID import *
 from flask import Flask, render_template, request, json, redirect, url_for 
 from flaskext.mysql import MySQL
+from rrd1 import *
 
 app = Flask(__name__)
 mysql = MySQL()
@@ -77,6 +78,15 @@ def interfazUpDown(host, comunidad, numInterfaces):
 		conexionIUD.close()
 		time.sleep(3)
 
+# Metodo que ejecuta rrd2
+def graphRRD(idInterfaz, host, comunidad):
+
+	generarGraficas(idInterfaz, comunidad, host)
+
+# Metodo que ejecuta rrd3
+def executeRRD3():
+	rrd3()
+
 ''' Metodos de navegacion '''
 
 # Metodo de navegacion a la pantalla principal.
@@ -142,11 +152,25 @@ def agregar():
 	else:
 		return json.dumps({'html':'<span> Llene todos los campos </span>'})
 
+# Elimina agente alv.
 @app.route('/eliminarAgente/<idAgente>', methods = ['post', 'get'])
 def eliminarAgente(idAgente):
 	cursor.execute('DELETE FROM interfaz_agente WHERE id_agente = "' + idAgente + '"')
 	cursor.execute('DELETE FROM agente WHERE id = "' + idAgente + '"')
 	return redirect(url_for('main'))
+
+@app.route('/generarGrafica/<idInterfaz>_<idAgente>', methods = ['post', 'get'])
+def generarGrafica(idInterfaz, idAgente):
+	cursor.execute('SELECT hostname, comunidad FROM agente WHERE id = "' + idAgente + '"')
+	dataAgente = cursor.fetchone()
+	rrd1()
+	hiloGrafica = threading.Thread(target = graphRRD, args = (idInterfaz, dataAgente[0], dataAgente[1],))
+	hiloGrafica.start()
+	hiloRRD3 = threading.Thread(target = executeRRD3, args = ())
+	hiloRRD3.start()
+	return redirect(url_for('main'))
+
+
 ''' Metodo de ejecucion de la aplicacion '''
 
 if __name__ == "__main__":

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE rrd SYSTEM "http://oss.oetiker.ch/rrdtool/rrdtool.dtd">
+<!-- Round Robin Database Dump -->
+<rrd>
+	<version>0003</version>
+	<step>60</step> <!-- Seconds -->
+	<lastupdate>1537210776</lastupdate> <!-- 2018-09-17 13:59:36 CDT -->
+
+	<ds>
+		<name> inpackets </name>
+		<type> COUNTER </type>
+		<minimal_heartbeat>600</minimal_heartbeat>
+		<min>NaN</min>
+		<max>NaN</max>
+
+		<!-- PDP Status -->
+		<last_ds>1112941</last_ds>
+		<value>1.2513678770e+03</value>
+		<unknown_sec> 0 </unknown_sec>
+	</ds>
+
+	<ds>
+		<name> outpackets </name>
+		<type> COUNTER </type>
+		<minimal_heartbeat>600</minimal_heartbeat>
+		<min>NaN</min>
+		<max>NaN</max>
+
+		<!-- PDP Status -->
+		<last_ds>792293</last_ds>
+		<value>1.2494045684e+03</value>
+		<unknown_sec> 0 </unknown_sec>
+	</ds>
+
+	<!-- Round Robin Archives -->
+	<rra>
+		<cf>AVERAGE</cf>
+		<pdp_per_row>1</pdp_per_row> <!-- 60 seconds -->
+
+		<params>
+		<xff>5.0000000000e-01</xff>
+		</params>
+		<cdp_prep>
+			<ds>
+			<primary_value>3.4510206299e+01</primary_value>
+			<secondary_value>0.0000000000e+00</secondary_value>
+			<value>NaN</value>
+			<unknown_datapoints>0</unknown_datapoints>
+			</ds>
+			<ds>
+			<primary_value>3.4493528814e+01</primary_value>
+			<secondary_value>0.0000000000e+00</secondary_value>
+			<value>NaN</value>
+			<unknown_datapoints>0</unknown_datapoints>
+			</ds>
+		</cdp_prep>
+		<database>
+			<!-- 2018-09-17 13:40:00 CDT / 1537209600 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:41:00 CDT / 1537209660 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:42:00 CDT / 1537209720 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:43:00 CDT / 1537209780 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:44:00 CDT / 1537209840 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:45:00 CDT / 1537209900 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:46:00 CDT / 1537209960 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:47:00 CDT / 1537210020 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:48:00 CDT / 1537210080 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:49:00 CDT / 1537210140 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:50:00 CDT / 1537210200 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:51:00 CDT / 1537210260 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:52:00 CDT / 1537210320 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:53:00 CDT / 1537210380 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:54:00 CDT / 1537210440 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:55:00 CDT / 1537210500 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:56:00 CDT / 1537210560 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:57:00 CDT / 1537210620 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:58:00 CDT / 1537210680 --> <row><v>2.5323217581e+01</v><v>2.5289796863e+01</v></row>
+			<!-- 2018-09-17 13:59:00 CDT / 1537210740 --> <row><v>3.4510206299e+01</v><v>3.4493528814e+01</v></row>
+		</database>
+	</rra>
+	<rra>
+		<cf>AVERAGE</cf>
+		<pdp_per_row>6</pdp_per_row> <!-- 360 seconds -->
+
+		<params>
+		<xff>5.0000000000e-01</xff>
+		</params>
+		<cdp_prep>
+			<ds>
+			<primary_value>0.0000000000e+00</primary_value>
+			<secondary_value>0.0000000000e+00</secondary_value>
+			<value>5.9833423880e+01</value>
+			<unknown_datapoints>3</unknown_datapoints>
+			</ds>
+			<ds>
+			<primary_value>0.0000000000e+00</primary_value>
+			<secondary_value>0.0000000000e+00</secondary_value>
+			<value>5.9783325678e+01</value>
+			<unknown_datapoints>3</unknown_datapoints>
+			</ds>
+		</cdp_prep>
+		<database>
+			<!-- 2018-09-17 13:00:00 CDT / 1537207200 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:06:00 CDT / 1537207560 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:12:00 CDT / 1537207920 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:18:00 CDT / 1537208280 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:24:00 CDT / 1537208640 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:30:00 CDT / 1537209000 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:36:00 CDT / 1537209360 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:42:00 CDT / 1537209720 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:48:00 CDT / 1537210080 --> <row><v>NaN</v><v>NaN</v></row>
+			<!-- 2018-09-17 13:54:00 CDT / 1537210440 --> <row><v>NaN</v><v>NaN</v></row>
+		</database>
+	</rra>
+</rrd>
