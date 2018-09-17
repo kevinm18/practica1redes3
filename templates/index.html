@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>SNMP</title>
 	<link href="../static/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
 	<!-- Numero de agentes monitorizados -->
@@ -21,8 +22,6 @@
 		  <th><strong>OS</strong></th>
 		  <th><strong>Num. Interfaces</strong></th>
 		  <th><strong>Estado</strong></th>
-		  <th><strong>Activar</strong></th>
-		  <th><strong>Desactivar</strong></th>
 		  <th><strong>Reporte</strong></th>
 		  <th><strong>Eliminar</strong></th>
 		  <th><strong>Estado de las interfaces</strong></th>
@@ -39,19 +38,11 @@
 		   		<td>{{row[5]}}</td>
 		   		<td>{{row[6]}}</td>
 		   		<td>{{row[7]}}</td>
-		   		<td>{{row[8]}}</td>
-		    	<td>
-		    		<form action="/activar" method="POST">
-		    			<input type="hidden" name="host" value="{{row[0]}}">
-		    			<input type="submit" value="Activar">
-		    		</form>
-		    	</td>
-		    	<td>
-		    		<form action="/desactivar" method="POST">
-		    			<input type="hidden" name="host" value="{{row[0]}}">
-		    			<input type="submit" value="Desactivar">
-		    		</form>
-		    	</td>
+		   		{% if row[8] == 0 %}
+		   			<td>Activo</td>
+		   		{% else %}
+		   			<td>Inactivo</td>
+		   		{% endif %}
 		    	<td>
 		    		<form action="/reporte" method="POST">
 		    			<input type="hidden" name="host" value="{{row[0]}}">
@@ -59,18 +50,20 @@
 		    		</form>
 		    	</td>		    	
 		    	<td>
-		    		<form action="/eliminar" method="POST">
+		    		<form action="/delete/{{row[0]}}" method="POST">
 		    			<input type="hidden" name="host" value="{{row[0]}}">
 		    			<input type="submit" value="Eliminar">
 		    		</form>		    	
 		    	</td>
 		    	<!-- Boton para ver estado de interfaces -->
+		    	{% if row[8] == 0 %}
 		    	<td>
 		    		<form action="/estadoInterfaces/{{row[0]}}" method="POST">
 		    			<input type="hidden" name="host" value="{{row[0]}}">
 		    			<input type="submit" value="Ver">
 		    		</form>		    	
 		    	</td>
+		    	{% endif %}
 		    </tr>
 		{% endfor %}
 	</table>

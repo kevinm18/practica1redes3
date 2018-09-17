@@ -14,15 +14,13 @@ def snmpGet(comunidad, ip, oid):
 	)
 	if errorIndication:
 		print(errorIndication)
-		return
 	elif errorStatus:
+		print('caca verde')
 		print('%s at %s' % (errorStatus.prettyPrint(),
                         errorIndex and varBinds[int(errorIndex) - 1][0] or '?'))
-		return
-	else:
-		resultado.update({'errorIndication': errorIndication})
-		resultado.update({'errorStatus': errorStatus})
-		resultado.update({'errorIndex': errorIndex})
-		resultado.update({'varBinds': varBinds})
-		return resultado
+	resultado.update({'errorIndication': errorIndication})
+	resultado.update({'errorStatus': errorStatus})
+	resultado.update({'errorIndex': errorIndex})
+	resultado.update({'varBinds': varBinds})
+	return resultado
 

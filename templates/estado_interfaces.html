@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>SNMP</title>
 	<link href="../static/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
 	<!-- Informacion del agente -->
@@ -24,8 +25,8 @@
 		</tr>
 		{% for row in dataInterfaz %}
 			<tr>
-				<td>{{row[0]}}</td>
 				<td>{{row[1]}}</td>
+				<td>{{row[0]}}</td>
 				<td>
 					{% if row[2] == 1 %}
 						UP

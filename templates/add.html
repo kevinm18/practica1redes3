@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<meta charset="UTF-8">
 	<title>Agregar Agente</title>
 </head>
@@ -9,10 +10,15 @@
 	<h1>Agregar Agente</h1>
 	<form action="/addAgent" method="POST"> 
 		<input type="text" name="nombre" placeholder="Nombre del agente">
+		<br>
   		<input type="text" name="host" placeholder="Host">
+  		<br>
   		<input type="text" name="comunidad" placeholder="Comunidad">
+  		<br>
   		<input type="text" name="version" placeholder="Version SNMP">
+  		<br>
   		<input type="text" name="puerto" placeholder="Puerto">
+  		<br>
   		<input type="submit" value="Agregar Agente">
 	</form>
 	

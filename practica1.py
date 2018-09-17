@@ -20,7 +20,7 @@ conn = mysql.connect()
 cursor = conn.cursor()
 
 hilosPing = []
-hilosInterfaces = []
+hilosInterfaces = {}
 hilosGraficas = []
 
 ''' Metodos de acceso a la base de datos '''
@@ -42,50 +42,54 @@ def insertar(host, comunidad, nombre, version, puerto, sistemaOperativo, interfa
 ''' Metodos usados por los hilos '''
 
 # Verifica cada segundo si un agente esta conectado o desconectado y actualiza su estado en la bd
-def pingUpDown(ip):
+def pingUpDown(ip, comunidad, numeroInterfaces):
 	while(1):
+		mysqlPUD = MySQL()
+		mysqlPUD.init_app(app)
+		conexionPUD = mysqlPUD.connect()
+		cursorPUD = conexionPUD.cursor()
 		response = os.system("ping -c 1 " + ip)
 		if response == 0:
-			cursor.execute('UPDATE agente SET estado = 0 where hostname = "' + ip + '"')
+			cursorPUD.execute('UPDATE agente SET estado = 0 where hostname = "' + ip + '"')
+			hilosInterfaces.update({str(ip) : threading.Thread(target = interfazUpDown, args = (ip, comunidad, numeroInterfaces,))})
+			hilosInterfaces[str(ip)].start()
 		else:
-			cursor.execute('UPDATE agente SET estado = 1 where hostname = "' + ip + '"')
-		conn.commit()
+			cursorPUD.execute('UPDATE agente SET estado = 1 where hostname = "' + ip + '"')
+		conexionPUD.commit()
+		conexionPUD.close()
 		time.sleep(5)
 
+# Monitoriza el estado de cada interfaz del agente en cuestion.
 def interfazUpDown(host, comunidad, numInterfaces):
 	while(1):
+		mysqlIUD = MySQL()
+		mysqlIUD.init_app(app)
+		conexionIUD = mysqlIUD.connect()
+		cursorIUD = conexionIUD.cursor()
 		for i in range (numInterfaces):
 			oid = OID_INTERFAZ_UP_DOWN
 			oid = oid + str(i + 1)
 			estado = parseResultAfterEquals(snmpGet(comunidad, host, oid))
-			cursor.execute('SELECT id FROM agente WHERE hostname = "' + host + '"') 
-			idAgente = cursor.fetchone()[0]
-			cursor.execute('UPDATE interfaz_agente SET estado = %s WHERE id_agente = %s AND id_interfaz = %s', (estado, idAgente, i + 1))
-			conn.commit()
+			cursorIUD.execute('SELECT id FROM agente WHERE hostname = "' + host + '"') 
+			idAgente = cursorIUD.fetchone()[0]
+			cursorIUD.execute('UPDATE interfaz_agente SET estado = %s WHERE id_agente = %s AND id_interfaz = %s', (estado, idAgente, i + 1))
+		conexionIUD.commit()
+		conexionIUD.close()
 		time.sleep(3)
-
-def generarGraficas(host, comunidad):
-	while(1):
-		
-		time.sleep(5)
 
 ''' Metodos de navegacion '''
 
 # Metodo de navegacion a la pantalla principal.
-@app.route('/')
+@app.route('/', methods = ['post', 'get'])
 def main():
 	numDispositivos = numeroDispositivos()[0]
 	cursor.execute("SELECT * FROM agente")
 	data = cursor.fetchall()
 	for row in data:
-		hilosPing.append(threading.Thread(target = pingUpDown, args = (row[1],)))
-		hilosPing[-1].start()
 		cursor.execute('SELECT num_interfaces FROM agente WHERE hostname = "' + row[1] + '"')
 		numeroInterfaces = cursor.fetchone()[0]
-		hilosInterfaces.append(threading.Thread(target = interfazUpDown, args = (row[1], row[4], numeroInterfaces,)))
-		hilosInterfaces[-1].start()
-		hilosGraficas.append(threading.Thread(target = generarGraficas, args = (row[1], row[4],)))
-		hilosGraficas[-1].start()
+		hilosPing.append(threading.Thread(target = pingUpDown, args = (row[1], row[4], numeroInterfaces,)))
+		hilosPing[-1].start()
 	return render_template('index.html', data = data, numDispositivos = numDispositivos)
 
 # Metodo de navegacion a la pantalla de agregar agente
@@ -93,11 +97,16 @@ def main():
 def add():
 	return render_template('add.html')
 
+@app.route('/delete/<idAgente>', methods = ['post', 'get'])
+def delete(idAgente):
+	cursor.execute('SELECT * FROM agente WHERE id = "' + idAgente + '"')
+	dataAgente = cursor.fetchone()
+	return render_template('confirm_delete.html', dataAgente = dataAgente)
+
 # Metodo que obtiene la informacion de las interfaces de un agente y redirige
 # a la pagina de ver estado de interfaces
 @app.route('/estadoInterfaces/<idAgente>', methods = ['post', 'get'])
 def estadoInterfaces(idAgente):
-	execfile('hola.py')
 	cursor.execute('SELECT * FROM agente WHERE id = "' + idAgente + '"')
 	dataAgente = cursor.fetchone()
 	cursor.execute('SELECT * FROM interfaz_agente WHERE id_agente = "' + idAgente + '"')
@@ -111,7 +120,8 @@ def estadoInterfaces(idAgente):
 		oid = OID_INTERFAZ_NOMBRE
 		oid = oid + str(i + 1)
 		nombreInterfaces.append(parseResultAfterEquals(snmpGet(dataAgente[4], dataAgente[1], oid)))
-		dataInterfaz[i].insert(1, nombreInterfaces[-1])
+		dataInterfaz[i].insert(0, nombreInterfaces[-1])
+		del dataInterfaz[i][1]
 	return render_template('estado_interfaces.html', dataAgente = dataAgente, dataInterfaz = dataInterfaz, nombreInterfaces = nombreInterfaces)
 
 ''' Metodos de formulario '''
@@ -132,6 +142,11 @@ def agregar():
 	else:
 		return json.dumps({'html':'<span> Llene todos los campos </span>'})
 
+@app.route('/eliminarAgente/<idAgente>', methods = ['post', 'get'])
+def eliminarAgente(idAgente):
+	cursor.execute('DELETE FROM interfaz_agente WHERE id_agente = "' + idAgente + '"')
+	cursor.execute('DELETE FROM agente WHERE id = "' + idAgente + '"')
+	return redirect(url_for('main'))
 ''' Metodo de ejecucion de la aplicacion '''
 
 if __name__ == "__main__":
